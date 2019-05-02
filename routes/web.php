@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,8 +18,11 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/chat', function () {
-    return view('chat');
+Route::group( ['middleware' => ['auth'] ] , function(){
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/chat', 'MessageController@index');
+    Route::get('/getUserLogin', 'MessageController@getuserlogin' );
+    Route::get('/messages', 'MessageController@getMessage' );
+    Route::post('/messages', 'MessageController@postMessage' );
 });

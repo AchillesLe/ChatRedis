@@ -19,5 +19,19 @@ window.Vue = require('vue');
 Vue.component('chat-layout', require('./components/ChatLayout.vue'))
 
 const app = new Vue({
-    el: '#app'
-})
+    el: '#app',
+    data: {
+        currentUserLogin: {}
+    },
+    created() {
+        this.getCurrentUserLogin()
+    },
+    methods: {
+        getCurrentUserLogin() {
+            axios.get('/getUserLogin')
+            .then(response => {
+                this.currentUserLogin = response.data
+            })
+        }
+    }
+});
