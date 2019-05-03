@@ -4,7 +4,7 @@
 			{{ message.user.name}}
 		</div>
 		<div class="message-item timestamp">
-			| {{ message.created_at.split(' ')[1] }}: 
+			| {{ message.created_at }} : 
 		</div>
 		<div class="message-item text-message">
 			{{ message.message }}

@@ -29,13 +29,33 @@ export default {
     data() {
         return {
             message: '',
+             csrfToken: '',
             list_messages: []
         }
     },
-      created() {
+    created() {
         this.loadMessage()
+        
+        Echo.channel('chatroom')
+            .listen('MessagePosted', (data) => {
+                let message = data.message
+                message.user = data.user
+                this.list_messages.push(message)
+                })   
+    },
+    updated(){             
+        this.scrollToBottom()
     },
     methods: {
+        scrollToBottom () {
+            var container = document.querySelector('.messages')
+            if (container) {
+                $(container).animate(
+                    { scrollTop: container.scrollHeight},
+                    { duration: 'medium', easing: 'swing' }
+                )
+            }
+        },
         loadMessage() {
             axios.get('/messages')
                 .then(response => {
@@ -50,13 +70,13 @@ export default {
                     message: this.message
                 })
                 .then(response => {
-                    console.log('success')
                     this.list_messages.push({
                         message: this.message,
                         created_at: new Date().toJSON().replace(/T|Z/gi, ' '),
                         user: this.$root.currentUserLogin
                     })
                     this.message = ''
+                    console.log(  new Date().toJSON() )
                 })
                 .catch(error => {
                     console.log(error)
