@@ -2,7 +2,7 @@
 	<div>
         <div class="chat">
             <div class="chat-title">
-                <h1>Chatroom</h1>
+                <h1>{{room.name}}</h1>
             </div>
             <div class="messages">
                 <div class="messages-content">
@@ -29,14 +29,17 @@ export default {
     data() {
         return {
             message: '',
-             csrfToken: '',
-            list_messages: []
+            list_messages: [],
+            room:{},
+            id:''
         }
     },
     created() {
+        let path = window.location.pathname
+        this.id = ( path.split('/') )[2]
         this.loadMessage()
         
-        Echo.channel('chatroom')
+        Echo.channel('chatroom_'+this.id)
             .listen('MessagePosted', (data) => {
                 let message = data.message
                 message.user = data.user
@@ -57,9 +60,10 @@ export default {
             }
         },
         loadMessage() {
-            axios.get('/messages')
+            axios.get('/messages/'+this.id)
                 .then(response => {
-                    this.list_messages = response.data
+                    this.room = response.data.info
+                    this.list_messages = response.data.messages
                 })
                 .catch(error => {
                     console.log(error)
@@ -67,16 +71,12 @@ export default {
         },
         sendMessage() {
             axios.post('/messages', {
-                    message: this.message
+                    message: this.message,
+                    room_id: this.room.id
                 })
                 .then(response => {
-                    this.list_messages.push({
-                        message: this.message,
-                        created_at: new Date().toJSON().replace(/T|Z/gi, ' '),
-                        user: this.$root.currentUserLogin
-                    })
+                    this.list_messages.push(response.data.entry)
                     this.message = ''
-                    console.log(  new Date().toJSON() )
                 })
                 .catch(error => {
                     console.log(error)

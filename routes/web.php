@@ -21,8 +21,13 @@ Auth::routes();
 
 Route::group( ['middleware' => ['auth'] ] , function(){
     Route::get('/home', 'HomeController@index')->name('home');
-    Route::get('/chat', 'MessageController@index');
+    Route::get('/chatroom', 'MessageController@room');
+    Route::get('/chat/{id}', 'MessageController@index');
     Route::get('/getUserLogin', 'MessageController@getuserlogin' );
-    Route::get('/messages', 'MessageController@getMessage' );
+    Route::get('/messages/{id}', 'MessageController@getMessage' );
     Route::post('/messages', 'MessageController@postMessage' );
+    // Room
+    Route::get('/allroom', 'RoomController@getAllRoom');
+    Route::get('/myroom', 'RoomController@getMyRoom');
+    Route::post('/create-room', 'RoomController@create');
 });

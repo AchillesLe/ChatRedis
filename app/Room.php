@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Message extends Model
+class Room extends Model
 {
-    protected $fillable = ['message', 'user_id', 'room_id' ];
+    protected $fillable = ['name', 'description','owner_id'];
 
     public function user() {
         return $this->belongsTo(User::class);
