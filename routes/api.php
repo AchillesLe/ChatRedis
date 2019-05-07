@@ -13,6 +13,13 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::post('login', 'Auth\LoginController@do_login');
+
+Route::middleware([ 'api_token' ])->group(function () {
+    Route::get('logout', 'Auth\LoginController@api_logout');
+    Route::get('rooms', 'RoomController@getAllRoom');
 });

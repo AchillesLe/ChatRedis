@@ -18,7 +18,6 @@ Route::get('/', function () {
 
 Auth::routes();
 
-
 Route::group( ['middleware' => ['auth'] ] , function(){
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/chatroom', 'MessageController@room');
@@ -30,4 +29,4 @@ Route::group( ['middleware' => ['auth'] ] , function(){
     Route::get('/allroom', 'RoomController@getAllRoom');
     Route::get('/myroom', 'RoomController@getMyRoom');
     Route::post('/create-room', 'RoomController@create');
-});
+}); 

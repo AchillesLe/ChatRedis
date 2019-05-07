@@ -34,4 +34,8 @@ class User extends Authenticatable
     public function rooms() {
         return $this->hasMany(Room::class);
     }
+
+    public function token() {
+        return $this->hasMany(Users_token::class);
+    }
 }
